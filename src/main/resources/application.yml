@@ -1,0 +1,6 @@
+jwt:
+  secret: AXJHBGCIOJISDERNISNR5CI6IKPXVCJ912345678901
+
+spring:
+  main:
+    allow-circular-references: true
