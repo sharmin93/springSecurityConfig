@@ -1,7 +1,7 @@
 package com.example.hello_spring.service;
 
-import com.example.hello_spring.db.entity.UserEntity;
-import com.example.hello_spring.db.repo.UserRepository;
+import com.example.hello_spring.service.db.entity.UserEntity;
+import com.example.hello_spring.service.db.repo.UserRepository;
 
 import com.example.hello_spring.model.request.UserRequest;
 

@@ -1,5 +1,5 @@
-package com.example.hello_spring.db.repo;
-import com.example.hello_spring.db.entity.UserEntity;
+package com.example.hello_spring.service.db.repo;
+import com.example.hello_spring.service.db.entity.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 
 

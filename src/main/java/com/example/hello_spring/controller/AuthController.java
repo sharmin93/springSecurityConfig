@@ -22,7 +22,6 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
 
-
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {
 

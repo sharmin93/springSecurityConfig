@@ -1,4 +1,4 @@
-package com.example.hello_spring.db.entity;
+package com.example.hello_spring.service.db.entity;
 
 import jakarta.persistence.*;
 
@@ -21,6 +21,7 @@ public class UserEntity implements UserDetails {
     private String username;
     @Column(length = 512)
     private String password;
+
 
 
     @Override

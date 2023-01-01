@@ -77,6 +77,7 @@ public class JwtUtility implements Serializable {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
                 .signWith(getSigningKey()).compact();
+
         String refreshToken = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)

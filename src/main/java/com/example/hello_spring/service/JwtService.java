@@ -1,7 +1,7 @@
 package com.example.hello_spring.service;
 
-import com.example.hello_spring.db.entity.UserEntity;
-import com.example.hello_spring.db.repo.UserRepository;
+import com.example.hello_spring.service.db.entity.UserEntity;
+import com.example.hello_spring.service.db.repo.UserRepository;
 import com.example.hello_spring.model.request.LoginRequest;
 import com.example.hello_spring.model.response.LoginResponse;
 import com.example.hello_spring.utility.JwtUtility;
@@ -33,7 +33,7 @@ public class JwtService implements UserDetailsService {
 
         authenticate(userName, password);
         final UserDetails userDetails = loadUserByUsername(userName);
-        Map<String,String> tokens = this.jwtUtility.generateToken(userDetails);
+        Map<String, String> tokens = this.jwtUtility.generateToken(userDetails);
         loginResponse.setAccessToken(tokens.get("access_token"));
         loginResponse.setRefreshToken(tokens.get("refresh_token"));
         return loginResponse;
