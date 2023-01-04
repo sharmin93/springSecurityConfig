@@ -1,7 +1,6 @@
 package com.example.hello_spring.controller;
 
 import com.example.hello_spring.model.request.UserRequest;
-import com.example.hello_spring.model.response.ErrorMessage;
 import com.example.hello_spring.model.response.UserResponse;
 import com.example.hello_spring.service.UserService;
 import org.slf4j.Logger;
@@ -41,6 +40,12 @@ public class UserController {
         logger.info("create user");
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
 
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<UserResponse> userById(@PathVariable("id") Long id){
+        UserResponse userResponse = userService.userById(id);
+        return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
 }

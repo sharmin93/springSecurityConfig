@@ -8,6 +8,7 @@ public interface UserService {
 
     UserResponse saveName(UserRequest userRequest);
 
+    UserResponse userById(long id) ;
 
 
 }
