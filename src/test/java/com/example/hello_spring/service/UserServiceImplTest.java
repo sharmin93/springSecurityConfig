@@ -44,4 +44,5 @@ class UserServiceImplTest {
         userServiceTest.userById(id);
         verify(userRepositoryTest).findFirstById(id);
     }
+
 }
