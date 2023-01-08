@@ -1,61 +1,60 @@
 package com.example.hello_spring.service;
+
+import com.example.hello_spring.model.request.UserRequest;
+
 import com.example.hello_spring.model.response.UserResponse;
+
 import com.example.hello_spring.service.db.entity.UserEntity;
 import com.example.hello_spring.service.db.repo.UserRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
+
+import org.springframework.stereotype.Service;
 
 
-import static org.mockito.Mockito.verify;
+@Service
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
 
 
-@SpringBootTest
-class UserServiceImplTest {
-    @InjectMocks
-    private UserServiceImpl userServiceTest;
-
-    @Mock
-    private UserRepository userRepositoryTest;
-
-
-    @Mock
-    private BCryptPasswordEncoder passwordEncoder;
-    private AutoCloseable autoCloseable;
-
-    @BeforeEach
-    void setUp() {
-        UserEntity user =new UserEntity(1L, "user", "pass");
-        Mockito.when(userRepositoryTest.findFirstById(1L)).thenReturn(user);
-
-
-        autoCloseable = MockitoAnnotations.openMocks(this);
     }
 
-    @AfterEach
-    void tearDown() throws Exception {
-        autoCloseable.close();
+    @Override
+    public UserResponse saveName(UserRequest userRequest) {
+        UserResponse userResponse = new UserResponse();
+        UserEntity userEntity = new UserEntity();
+        buildUserEntity(userEntity, userRequest);
+        userRepository.save(userEntity);
+        userResponse.setId(userEntity.getId());
+        return userResponse;
     }
 
-    @Test
-    void testUserById() {
-        long id = 1;
-        UserResponse userResponse = userServiceTest.userById(id);
-        Assertions.assertEquals(userResponse.getId(), 1L);
-        Assertions.assertEquals(userResponse.getUsername(), "user");
+    @Override
+    public UserResponse userById(long id) {
+        UserEntity firstById = userRepository.findFirstById(id);
+        if (firstById == null) {
+            logger.error("user id not found", (Object) null);
+            return null;
+        } else {
+            UserResponse response = new UserResponse();
+            response.setUsername(firstById.getUsername());
+            response.setId(firstById.getId());
 
+            return response;
+        }
     }
+
+    private void buildUserEntity(UserEntity userEntity, UserRequest userRequest) {
+        userEntity.setUsername(userRequest.getUsername());
+        userEntity.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+    }
+
 
 }

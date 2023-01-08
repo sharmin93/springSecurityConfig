@@ -16,16 +16,14 @@ import org.springframework.web.client.RestTemplate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
+@SpringBootTest
 class UserControllerTest {
 
     private String baseUrl;
     private static RestTemplate restTemplate;
-//    @LocalServerPort
-//    private  int port;
+
     @Autowired
-    private TestH2Repository testH2Repository;
+    private TestH2Repository h2Repository;
 
     @BeforeAll
     public static void init() {
@@ -34,6 +32,7 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
+
         baseUrl ="http://localhost:8003/api/v1/user";
     }
 
@@ -42,11 +41,12 @@ class UserControllerTest {
     }
 
     @Test
-    void testUserInfoAdd() {
-        UserEntity userEntity = new UserEntity("auth08", "1234");
+   public void testUserInfoAdd() {
+        UserEntity userEntity = new UserEntity("auth89", "1234");
         UserEntity userEntityResponse = restTemplate.postForObject(baseUrl, userEntity, UserEntity.class);
         assert userEntityResponse != null;
-        assertEquals("auth08", userEntityResponse.getUsername());
+//        assertEquals(1, h2Repository.findAll().size());
+        assertEquals("auth89", userEntityResponse.getUsername());
 
 
     }
