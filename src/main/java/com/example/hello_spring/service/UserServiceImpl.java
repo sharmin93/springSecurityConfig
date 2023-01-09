@@ -3,7 +3,6 @@ package com.example.hello_spring.service;
 import com.example.hello_spring.model.request.UserRequest;
 
 import com.example.hello_spring.model.response.UserResponse;
-
 import com.example.hello_spring.service.db.entity.UserEntity;
 import com.example.hello_spring.service.db.repo.UserRepository;
 import org.slf4j.Logger;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+
     final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
