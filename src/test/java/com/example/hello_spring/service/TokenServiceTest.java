@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +31,6 @@ class TokenServiceTest {
     private TokenManager tokenManager2;
 
 
-
     @BeforeEach
     void setUp() {
         token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjczMjU0NDg2LCJleHAiOjE2NzMyNTQ2MDZ9.C-zP2SKtS3z51ARgPQF6Sdj2nybn-tfGIXFywowo21I";
@@ -49,7 +49,7 @@ class TokenServiceTest {
     }
 
     @Test
-    @Disabled
+  
     void getTokenByLastOneHour() {
         List<TokenManager> tokenManagerList = new ArrayList<>();
         token2 = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMiIsImlhdCI6MTY3MzI1NDQ4NiwiZXhwIjoxNjczMjU0NjA2fQ.8jW4hYl3hg4sciTS3Tpe-VMhRRZMGUfow0p6q0WvF_I";
@@ -60,7 +60,11 @@ class TokenServiceTest {
         tokenManagerList.add(tokenManager2);
         LocalDateTime currentTime = LocalDateTime.now();
 
-        Mockito.when(tokenManagerRepositoryTest.getTokenManagerByLastOneHour(currentTime.minusHours(5))).thenReturn(tokenManagerList);
-        Assertions.assertEquals(2,tokenManagerList.size());
+        Mockito.when(tokenManagerRepositoryTest.getTokenManagerByLastOneHour(Mockito.any(LocalDateTime.class))).thenReturn(tokenManagerList);
+        HashMap<String, Object> tokenByLastOneHour = tokenManagerServiceTest.getTokenByLastOneHour();
+        Assertions.assertEquals(true, tokenByLastOneHour.get("status"));
+        List<TokenManager> dataList = (List<TokenManager>) tokenByLastOneHour.get("data");
+        Assertions.assertEquals(true, tokenByLastOneHour.get("status"));
+        Assertions.assertEquals(2, dataList.size());
     }
 }

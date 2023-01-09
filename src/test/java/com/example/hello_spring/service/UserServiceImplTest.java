@@ -1,4 +1,5 @@
 package com.example.hello_spring.service;
+
 import com.example.hello_spring.model.response.UserResponse;
 import com.example.hello_spring.service.db.entity.UserEntity;
 import com.example.hello_spring.service.db.repo.UserRepository;
@@ -15,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+
+import java.util.HashMap;
 
 import static org.mockito.Mockito.verify;
 
@@ -33,7 +36,7 @@ class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        UserEntity user =new UserEntity(1L, "user", "pass");
+        UserEntity user = new UserEntity(1L, "user", "pass");
         Mockito.when(userRepositoryTest.findFirstById(1L)).thenReturn(user);
         autoCloseable = MockitoAnnotations.openMocks(this);
     }
