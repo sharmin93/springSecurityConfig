@@ -2,6 +2,7 @@ package com.example.hello_spring.service;
 
 import com.example.hello_spring.service.db.entity.TokenManager;
 import com.example.hello_spring.service.db.repo.TokenRepository;
+import com.example.hello_spring.utility.JwtUtility;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,7 +30,8 @@ class TokenServiceTest {
     private AutoCloseable autoCloseable;
     private TokenManager tokenManager;
     private TokenManager tokenManager2;
-
+    @Mock
+    private JwtUtility jwtUtil;
 
     @BeforeEach
     void setUp() {
@@ -49,7 +51,6 @@ class TokenServiceTest {
     }
 
     @Test
-  
     void getTokenByLastOneHour() {
         List<TokenManager> tokenManagerList = new ArrayList<>();
         token2 = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMiIsImlhdCI6MTY3MzI1NDQ4NiwiZXhwIjoxNjczMjU0NjA2fQ.8jW4hYl3hg4sciTS3Tpe-VMhRRZMGUfow0p6q0WvF_I";
@@ -66,5 +67,42 @@ class TokenServiceTest {
         List<TokenManager> dataList = (List<TokenManager>) tokenByLastOneHour.get("data");
         Assertions.assertEquals(true, tokenByLastOneHour.get("status"));
         Assertions.assertEquals(2, dataList.size());
+    }
+
+    @Test
+    void testKillSession() {
+        String token = "token";
+        String currentUser = "admin";
+
+        String authHeader = "Bearer" + " " + token;
+        String userName = "user";
+
+        Mockito.when(tokenManagerRepositoryTest.killSession(userName)).thenReturn(2);
+        Mockito.when(jwtUtil.getUserNameFromToken(token)).thenReturn(currentUser);
+
+        HashMap<String, Object> sessionData = tokenManagerServiceTest.killSession(authHeader, userName);
+        Assertions.assertEquals(true, sessionData.get("status"));
+        Assertions.assertEquals(2, sessionData.get("data"));
+
+
+    }
+
+    @Test
+    void canNotKillSelfSession() {
+        String token = "token";
+        String currentUser = "admin";
+        System.out.println("currentUser" + " " + currentUser);
+        String authHeader = "Bearer" + " " + token;
+        String userName = "admin";
+
+
+        Mockito.when(jwtUtil.getUserNameFromToken(token)).thenReturn(currentUser);
+
+        HashMap<String, Object> sessionData = tokenManagerServiceTest.killSession(authHeader, userName);
+        Assertions.assertEquals(true, sessionData.get("status"));
+        Assertions.assertEquals("You are trying to kill your session", sessionData.get("message"));
+        Assertions.assertNull(sessionData.get("data"));
+
+
     }
 }
