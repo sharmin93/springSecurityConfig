@@ -7,9 +7,12 @@ import com.example.hello_spring.service.db.entity.UserEntity;
 import com.example.hello_spring.service.db.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 
 @Service
@@ -55,6 +58,23 @@ public class UserServiceImpl implements UserService {
         userEntity.setUsername(userRequest.getUsername());
         userEntity.setPassword(passwordEncoder.encode(userRequest.getPassword()));
     }
+    public HashMap<String, Object> create(UserEntity users)  {
+        HashMap<String, Object> res = new HashMap<>();
 
+        UserEntity oldUser = userRepository.findByUsername(users.getUsername());
+        if (oldUser != null) {
+            res.put("message", "User already exists with this user name");
+            res.put("status", 0);
+            res.put("data", null);
+        } else {
+            users.setPassword(passwordEncoder.encode(users.getPassword()));
+            UserEntity newUser = userRepository.saveAndFlush(users);
+            res.put("message", "User Saved successfully");
+            res.put("status", 1);
+            res.put("data", newUser);
+            logger.info("user save data ", res);
+        }
+        return res;
+    }
 
 }
